@@ -1,28 +1,25 @@
 import Counter from '../Counter';
-import {render, fireEvent} from '@testing-library/react';
+import {render, screen, fireEvent} from '@testing-library/react';
 import '@testing-library/jest-dom/'
-
-beforeEach(()=>{
- document.body.innerHTML = '';
-})
-
 
 test('counter increments and decrements when the buttons are clicked', () => {
 
-  const {container} = render(<Counter />);
+  render(<Counter />);
 
-  const [increment, decrement] = container.querySelectorAll('button')
-  let message = container.querySelector('.message')
-    expect(message).toHaveTextContent('Current count: 0')
+  const increment = screen.getByRole('button',{name:/increment/i})
+  const decrement = screen.getByRole('button', {name:/decrement/i})
+
+  let message = screen.getByText(/count/i);
+  expect(message).toHaveTextContent('Current count: 0')
 
 
   fireEvent.click(increment);
-  message = container.querySelector('.message')
+  message = screen.getByText(/count/i);
   expect(message).toHaveTextContent('Current count: 1')
 
 
   fireEvent.click(decrement);
-  message = container.querySelector('.message')
+  message = screen.getByText(/count/i);
   expect(message).toHaveTextContent('Current count: 0')
 
 })
