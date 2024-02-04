@@ -4,8 +4,7 @@ import LoginForm from '../LoginForm';
 
 test('submitting the form calls onSubmit with username and password',async ()=>{
 
-  let submittedData;
-  const handleSubmit =  (data:any) => (submittedData = data);
+  const handleSubmit =  jest.fn();
 
   render(<LoginForm onSubmit={handleSubmit}/>);
   
@@ -17,8 +16,10 @@ test('submitting the form calls onSubmit with username and password',async ()=>{
   await userEvent.type(screen.getByLabelText(/password/i), password);
   await userEvent.click(screen.getByRole('button',{name:/submit/i}));
 
-  expect(submittedData).toEqual({
+  expect(handleSubmit).toHaveBeenCalledWith({
     username,
     password
-  })
+  });
+
+  expect(handleSubmit).toHaveBeenCalledTimes(1);
 })
